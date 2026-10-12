@@ -121,7 +121,7 @@ function renderResult(res,isShare){
   var t=D.TYPES[res.type_id]; if(!t){show("s-gate");return;}
   var aid=res.type_id.split("-")[1], a=D.ARCH.filter(function(x){return x.id===aid;})[0], c=ART[aid];
   var bars=D.DIMS.map(function(d){var v=res.scores[d.name]||0;return '<div class="srow"><span>'+d.name+'</span><span class="t"><i style="width:'+v+'%"></i></span><b>'+v+'</b></div>';}).join("");
-  var h='<div class="art" style="background:radial-gradient(90% 80% at 50% 20%,'+c[0]+','+c[1]+')"><div class="fig" style="background:linear-gradient(180deg,'+c[2]+',transparent)"></div><span class="tag">'+esc(a.name)+' · '+(res.gender==="male"?"他":"她")+'</span></div>'+
+  var h='<div class="art" style="background:radial-gradient(90% 80% at 50% 20%,'+c[0]+','+c[1]+')"><div class="fig" style="background:linear-gradient(180deg,'+c[2]+',transparent)"></div><img class="pimg" src="img/types/'+res.type_id+'.webp" alt="" onerror="this.remove()"><span class="tag">'+esc(a.name)+' · '+(res.gender==="male"?"他":"她")+'</span></div>'+
     '<div class="cbody"><div class="ctop">AURA · 个人气场诊断报告</div><div class="tname">'+esc(t.name)+'</div><div class="ten">'+t.en+'</div>'+
     '<div class="quote">'+esc(t.quote)+'</div><div class="kws">'+t.kw.map(function(k){return"<span>"+esc(k)+"</span>";}).join("")+'</div>'+
     '<div class="scores">'+bars+'</div>';
@@ -150,6 +150,15 @@ function exportPng(res,t,a,c){
   var soft=x.createLinearGradient(0,0,0,760);soft.addColorStop(0,c[1]);soft.addColorStop(1,"#fffaf3");x.fillStyle=soft;x.globalAlpha=.55;x.fillRect(0,0,W,760);x.globalAlpha=1;
   var f=x.createLinearGradient(0,120,0,640);f.addColorStop(0,c[2]);f.addColorStop(1,"rgba(246,240,230,0)");x.fillStyle=f;
   x.beginPath();x.moveTo(W/2-160,640);x.lineTo(W/2-160,280);x.arc(W/2,280,160,Math.PI,0);x.lineTo(W/2+160,640);x.fill();
+  var pi=new Image(),fin=false;
+  function go(ok){if(fin)return;fin=true;
+    if(ok){var ph=Math.min(760,W*pi.height/pi.width),sy=pi.height*Math.min(1,760/(W*pi.height/pi.width));x.drawImage(pi,0,0,pi.width,sy,0,0,W,ph);
+      var fg=x.createLinearGradient(0,ph-260,0,ph);fg.addColorStop(0,"rgba(246,240,230,0)");fg.addColorStop(1,"#f6f0e6");x.fillStyle=fg;x.fillRect(0,ph-260,W,262);
+      var tg=x.createLinearGradient(0,0,0,170);tg.addColorStop(0,"rgba(246,240,230,.9)");tg.addColorStop(1,"rgba(246,240,230,0)");x.fillStyle=tg;x.fillRect(0,0,W,170);}
+    rest();}
+  pi.onload=function(){go(true);};pi.onerror=function(){go(false);};setTimeout(function(){go(false);},4000);
+  pi.src="img/types/"+res.type_id+".webp";
+  function rest(){
   x.textAlign="left";x.fillStyle="#b8924e";x.font="30px Georgia,serif";x.fillText("A U R A",80,100);
   x.fillStyle="#8a7d6e";x.font="26px "+F;x.fillText("个人气场诊断报告",250,100);
   x.fillStyle="rgba(47,41,34,.72)";x.font="28px "+F;x.fillText(a.name+" · "+(res.gender==="male"?"他":"她"),80,720);
@@ -164,6 +173,7 @@ function exportPng(res,t,a,c){
   var url=cv.toDataURL("image/png");
   $("modal-img").src=url;$("modal").hidden=false;
   var l=document.createElement("a");l.href=url;l.download="AURA-"+t.name+".png";document.body.appendChild(l);l.click();l.remove();
+  }
 }
 function rr(x,a,b,w,h,r){x.beginPath();x.moveTo(a+r,b);x.arcTo(a+w,b,a+w,b+h,r);x.arcTo(a+w,b+h,a,b+h,r);x.arcTo(a,b+h,a,b,r);x.arcTo(a,b,a+w,b,r);x.closePath();}
 $("modal-close").onclick=function(){$("modal").hidden=true;};

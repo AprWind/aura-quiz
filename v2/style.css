@@ -182,3 +182,7 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 .mbox{max-width:420px;text-align:center}
 .mbox img{width:100%;border-radius:14px;margin:10px 0;box-shadow:0 12px 40px rgba(60,40,20,.2)}
 .mbox p{color:#fff8ef;font-size:13px}
+.art{overflow:hidden;height:auto;aspect-ratio:4/5}
+.art .pimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 12%}
+.art .tag{z-index:2}
+.art:has(.pimg)::after{content:"";position:absolute;inset:auto 0 0 0;height:90px;background:linear-gradient(180deg,rgba(246,240,230,0),rgba(246,240,230,.85));pointer-events:none}
