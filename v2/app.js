@@ -18,8 +18,25 @@ function uuid(){if(crypto.randomUUID)return crypto.randomUUID();var b=crypto.get
 function rndTok(n){return Array.from(crypto.getRandomValues(new Uint8Array(n)),function(x){return x.toString(16).padStart(2,"0");}).join("");}
 
 function rpc(name,body){
-  return fetch(CFG.SUPABASE_URL+"/rest/v1/rpc/"+name,{method:"POST",headers:{"Content-Type":"application/json",apikey:CFG.SUPABASE_ANON_KEY,Authorization:"Bearer "+CFG.SUPABASE_ANON_KEY},body:JSON.stringify(body)})
-   .then(function(r){if(!r.ok)throw new Error("http_"+r.status);return r.json();});
+  var ctrl=typeof AbortController!=="undefined"?new AbortController():null;
+  var to=ctrl?setTimeout(function(){ctrl.abort();},15000):null;
+  return fetch(CFG.SUPABASE_URL+"/rest/v1/rpc/"+name,{method:"POST",headers:{"Content-Type":"application/json",apikey:CFG.SUPABASE_ANON_KEY,Authorization:"Bearer "+CFG.SUPABASE_ANON_KEY},body:JSON.stringify(body),signal:ctrl?ctrl.signal:undefined})
+   .then(function(r){
+     return r.text().then(function(t){
+       var data=null; try{data=t?JSON.parse(t):null;}catch(e){var pe=new Error("bad_json");pe.kind="bad_json";pe.status=r.status;throw pe;}
+       if(!r.ok){var he=new Error("http_"+r.status);he.kind="http";he.status=r.status;he.data=data;throw he;}
+       return data;
+     });
+   })
+   .finally(function(){if(to)clearTimeout(to);});
+}
+function netErrText(err){
+  if(!err)return "网络异常，请重试（重试不会重复计次）";
+  if(err.name==="AbortError"||(err.kind==="http"&&err.status===0))return "连接超时，请检查网络后重试（国内访问 supabase.co 可能较慢或被拦截，可换网络/系统浏览器或开启加速后再试；重试不会重复计次）";
+  if(err.message==="Failed to fetch"||err.name==="TypeError")return "无法连接服务器（网络异常）。国内网络或微信内置浏览器常无法直连 supabase.co，请用系统浏览器打开，或开启 VPN/加速后再试（重试不会重复计次）";
+  if(err.kind==="http")return "服务器响应异常（"+err.status+"），请稍后重试（重试不会重复计次）";
+  if(err.kind==="bad_json")return "服务器返回异常，请稍后重试（重试不会重复计次）";
+  return "网络异常，请重试（重试不会重复计次）";
 }
 var api = MOCK ? {
   start:function(code,crid,g){return new Promise(function(res){setTimeout(function(){res(code.length>=4?{ok:true,session_token:"mock-"+rndTok(12),remaining:2,replay:false}:{ok:false,error:"invalid_or_exhausted"});},300);});},
@@ -47,7 +64,7 @@ $("start").onclick=function(){
     if(!r||!r.ok){msg.textContent=r&&r.error==="bad_request"?"请求异常，请刷新重试":"访问码无效或次数已用完";st=null;save();return;}
     st={session_token:r.session_token,gender:gender,answers:[],idx:0,remaining:r.remaining};save();
     $("code").value=""; renderQ(); show("s-quiz");
-  }).catch(function(){msg.textContent="网络异常，请重试（重试不会重复计次）";})
+  }).catch(function(err){msg.textContent=netErrText(err);})
   .finally(function(){busy=false;$("start").disabled=false;});
 };
 
@@ -84,7 +101,7 @@ function submit(){
   Promise.all([p,new Promise(function(r){setTimeout(r,1200);})]).then(function(a){
     var r=a[0]; if(r&&r.ok){st.share_token=r.share_token;delete st.answers;st.done=true;save();}
     renderResult(st.result,false);
-  }).catch(function(){renderResult(st.result,false);$("res-msg").textContent="报告已生成，分享链接暂未就绪（网络异常），稍后点击分享会自动重试";})
+  }).catch(function(err){renderResult(st.result,false);$("res-msg").textContent="报告已生成，分享链接暂未就绪（"+((err&&(err.message==="Failed to fetch"||err.name==="TypeError"||err.name==="AbortError"))?"无法连接服务器，国内网络可能需加速":"网络异常")+"），稍后点击分享会自动重试";})
   .finally(function(){busy=false;});
 }
 
@@ -146,7 +163,7 @@ if(MOCK)$("mockbar").hidden=false;
 var m=location.hash.match(/^#s=([A-Za-z0-9]{8,64})$/);
 if(m){show("s-loading");$("load-msg").textContent="正在打开分享报告…";
   api.share(m[1]).then(function(r){if(r&&r.type_id&&D.TYPES[r.type_id])renderResult(r,true);else{show("s-gate");$("gate-msg").textContent="分享链接已失效或不存在";}})
-   .catch(function(){show("s-gate");$("gate-msg").textContent="分享报告加载失败";});
+   .catch(function(err){show("s-gate");$("gate-msg").textContent=(err&&(err.message==="Failed to fetch"||err.name==="TypeError"||err.name==="AbortError"))?"分享报告加载失败（无法连接服务器，国内网络可能需加速）":"分享报告加载失败";});
 }else if(st&&st.done&&st.result){renderResult(st.result,false);}
 else if(st&&st.result&&st.session_token){submit();show("s-loading");}
 else if(st&&st.session_token&&st.answers){renderQ();show("s-quiz");}
