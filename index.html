@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="theme-color" content="#1b1f2a" />
+  <meta name="description" content="性张力打分 · 社交气场与表达魅力测试（娱乐向，非专业测评）" />
+  <title>性张力打分 · 气场诊断报告</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- 首页 / 访问码 -->
+    <section id="screen-gate" class="screen">
+      <header class="hero">
+        <p class="eyebrow">AURA REPORT · 气场诊断</p>
+        <h1>性张力打分</h1>
+        <p class="sub">社交气场与表达魅力测试（娱乐向，非专业测评）</p>
+        <ul class="facts">
+          <li><b>22</b><span>道情境题</span></li>
+          <li><b>5</b><span>维气场分析</span></li>
+          <li><b>3</b><span>分钟出报告</span></li>
+        </ul>
+      </header>
+
+      <div class="card gate-card">
+        <p id="gate-hint" class="gate-hint hidden"></p>
+        <label class="field" for="code">访问码</label>
+        <input id="code" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="例如 AQ-XXXX-XXXX" maxlength="40" />
+        <p class="err" id="gate-err" role="alert"></p>
+        <button class="btn btn-primary" id="btn-start" type="button" disabled>内容加载中…</button>
+        <p class="fine">每次开始测试会使用 1 次访问码。答题过程中可返回上一题修改。</p>
+      </div>
+    </section>
+
+    <!-- 答题 -->
+    <section id="screen-quiz" class="screen hidden">
+      <div class="quiz-top">
+        <span id="q-count" class="q-count">01 / 22</span>
+        <span id="q-uses" class="q-uses"></span>
+      </div>
+      <div class="progress" aria-hidden="true"><i id="prog"></i></div>
+      <div class="card">
+        <p class="q-title" id="q-title"></p>
+        <div id="q-options" class="options"></div>
+        <button class="btn btn-text hidden" id="btn-prev" type="button">← 上一题</button>
+      </div>
+    </section>
+
+    <!-- 结果 -->
+    <section id="screen-result" class="screen hidden">
+      <div id="share-banner" class="share-banner hidden">
+        <b>这是一份好友分享的气场报告</b>
+        <span>只读查看 · 想知道你自己的气场指数？</span>
+      </div>
+
+      <article class="report" id="result-card">
+        <div class="report-head">
+          <div class="rh-row">
+            <span>AURA REPORT</span>
+            <span id="report-no">No. 0000</span>
+          </div>
+          <p class="rh-title">个人气场诊断报告</p>
+          <div class="score-hero">
+            <div class="score-num" id="score-num">--</div>
+            <div class="score-label">综合气场指数 / 100</div>
+          </div>
+          <div class="title-tag" id="result-title"></div>
+          <p class="one-liner" id="result-line"></p>
+        </div>
+
+        <div class="report-body">
+          <h3 class="sec-title"><span>01</span>五维气场分布</h3>
+          <div class="bars" id="bars"></div>
+          <p class="top-dim" id="top-dim"></p>
+
+          <h3 class="sec-title"><span>02</span>趣味解读</h3>
+          <p class="para" id="result-body"></p>
+
+          <h3 class="sec-title"><span>03</span>相处小提示</h3>
+          <p class="para" id="result-tip"></p>
+          <p class="para soft" id="result-extra"></p>
+
+          <div class="report-foot">
+            <span>性张力打分 · 气场诊断</span>
+            <span id="report-date"></span>
+          </div>
+          <p class="report-disclaimer">娱乐向测试，非心理或医学评估。分数不代表魅力高低或人际价值。</p>
+        </div>
+      </article>
+
+      <p id="uses-left" class="uses-left"></p>
+
+      <div class="actions" id="owner-actions">
+        <button class="btn btn-primary" id="btn-save" type="button">保存长图</button>
+        <button class="btn btn-ghost" id="btn-copy" type="button">复制结果链接</button>
+        <button class="btn btn-ghost" id="btn-retry" type="button">再测一次</button>
+      </div>
+      <div class="actions hidden" id="share-actions">
+        <button class="btn btn-primary" id="btn-try" type="button">我也测一测</button>
+        <button class="btn btn-ghost" id="btn-save2" type="button">保存这张报告</button>
+      </div>
+      <p class="msg" id="result-msg" role="status"></p>
+      <div id="copy-fallback" class="copy-fallback hidden">
+        <p>自动复制失败，请长按下面的链接手动复制：</p>
+        <input id="copy-input" type="text" readonly />
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>娱乐向测试，非心理或医学评估</p>
+      <p>请轻松对待，勿用于评判他人</p>
+    </footer>
+  </div>
+
+  <!-- 长图预览 -->
+  <div id="img-modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-inner">
+      <p class="modal-tip" id="modal-tip">长按图片保存到相册</p>
+      <div class="modal-img"><img id="modal-img" alt="气场报告长图" /></div>
+      <a class="btn btn-primary hidden" id="btn-download" download="气场报告.png">下载图片</a>
+      <button class="btn btn-ghost" id="btn-close-modal" type="button">关闭</button>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
