@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0a0f">
+<title>AURA · 个人气场诊断报告</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="mockbar" class="mockbar" hidden>演示模式 · 不连接后端 · 不扣次数</div>
+<main class="app">
+  <section id="s-gate" class="screen">
+    <div class="brand"><span class="logo">AURA</span><span class="sub">个人气场诊断报告</span></div>
+    <h1 class="hero">性张力打分</h1>
+    <p class="lead">28 道情境题 · 4 个维度 · 12 种气场原型<br>测一测，你的吸引力藏在哪里</p>
+    <div class="dims"><span>气质表现</span><span>互动张力</span><span>情绪吸引</span><span>自我边界</span></div>
+    <div class="label">选择你的报告类型</div>
+    <div class="gender">
+      <button class="gbtn" data-g="female"><i class="gi gi-f"></i><b>她</b><small>女生版 · 6 种原型</small></button>
+      <button class="gbtn" data-g="male"><i class="gi gi-m"></i><b>他</b><small>男生版 · 6 种原型</small></button>
+    </div>
+    <div class="label">输入访问码</div>
+    <input id="code" class="code" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="请输入访问码" maxlength="32">
+    <button id="start" class="primary">开始诊断</button>
+    <p id="gate-msg" class="msg"></p>
+    <p class="fine">开始后计为一次测评；中途刷新或断网可继续作答，不会重复计次。</p>
+  </section>
+
+  <section id="s-quiz" class="screen" hidden>
+    <div class="qtop"><button id="prev" class="ghost">‹ 上一题</button><span id="qcount" class="qcount"></span></div>
+    <div class="bar"><i id="qbar"></i></div>
+    <div class="qdim" id="qdim"></div>
+    <h2 id="qtext" class="qtext"></h2>
+    <div id="opts" class="opts"></div>
+  </section>
+
+  <section id="s-loading" class="screen center" hidden>
+    <div class="orb"></div><p id="load-msg">正在生成你的气场报告…</p>
+  </section>
+
+  <section id="s-result" class="screen" hidden>
+    <div id="card" class="card"></div>
+    <div id="result-actions" class="actions">
+      <button id="save" class="primary">保存报告图片</button>
+      <button id="share" class="secondary">复制分享链接</button>
+      <button id="again" class="ghost">再测一次</button>
+    </div>
+    <p id="res-msg" class="msg"></p>
+  </section>
+</main>
+<div id="modal" class="modal" hidden><div class="mbox"><p>长按图片保存到相册</p><img id="modal-img" alt="报告图片"><button id="modal-close" class="ghost">关闭</button></div></div>
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="scoring.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
