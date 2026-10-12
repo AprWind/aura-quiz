@@ -18,9 +18,9 @@
 window.AURA_CONFIG = {
   MODE: "live",
   /* 部署 Worker 后填入，例如 "https://aura-quiz-proxy.<subdomain>.workers.dev" — 勿带尾斜杠 */
-  API_BASE: "",
+  API_BASE: "https://aura-quiz-proxy.aprwind.workers.dev",
   /* 仅排障时显式 true；生产应走 API_BASE 代理 */
-  USE_DIRECT_SUPABASE: true,  /* TODO: set false after API_BASE is live */
+  USE_DIRECT_SUPABASE: false,
   SUPABASE_URL: "https://nkkcecuopkdmtvsjdcav.supabase.co",
   SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ra2NlY3VvcGtkbXR2c2pkY2F2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE3NzA2MjAsImV4cCI6MjEwNzM0NjYyMH0.sRLQ8VX9VXstvTVD4g1OP8ITVuQvNJ2xe23yq__OGdk"
 };
