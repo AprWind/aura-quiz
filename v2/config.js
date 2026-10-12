@@ -8,7 +8,7 @@
  * 上线切换（迁移 SQL 执行并验证后）：把下面 MODE 改为 "live" 并推送。不要把 MODE 留在 "mock" 并公开投放链接。
  */
 window.AURA_CONFIG = {
-  MODE: "mock",
+  MODE: "live",
   SUPABASE_URL: "https://nkkcecuopkdmtvsjdcav.supabase.co",
   SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ra2NlY3VvcGtkbXR2c2pkY2F2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE3NzA2MjAsImV4cCI6MjEwNzM0NjYyMH0.sRLQ8VX9VXstvTVD4g1OP8ITVuQvNJ2xe23yq__OGdk"
 };
