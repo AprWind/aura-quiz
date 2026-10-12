@@ -18,7 +18,7 @@
 window.AURA_CONFIG = {
   MODE: "live",
   /* 部署 Worker 后填入，例如 "https://aura-quiz-proxy.<subdomain>.workers.dev" — 勿带尾斜杠 */
-  API_BASE: "https://aura-quiz-proxy.aprwind.workers.dev",
+  API_BASE: "https://aura-quiz-proxy.vercel.app",
   /* 仅排障时显式 true；生产应走 API_BASE 代理 */
   USE_DIRECT_SUPABASE: false,
   SUPABASE_URL: "https://nkkcecuopkdmtvsjdcav.supabase.co",
