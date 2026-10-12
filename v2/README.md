@@ -14,3 +14,6 @@
 
 ## 测试
 `node test/scoring.test.js`（分布 + 12 型可达），`--calibrate` 重新计算 BIAS。
+
+## Cloudflare Worker 代理（国内/微信）
+见仓库 `worker/README.md`。部署后在 `config.js` 设置 `API_BASE` 为 Worker URL，并把 `USE_DIRECT_SUPABASE` 改为 `false`，避免浏览器直连 supabase.co。

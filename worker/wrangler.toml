@@ -1,0 +1,15 @@
+# AURA quiz v2 Supabase RPC proxy
+# Deploy: set secret, then wrangler deploy
+#   npx wrangler secret put SUPABASE_ANON_KEY
+#   npx wrangler deploy
+
+name = "aura-quiz-proxy"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+workers_dev = true
+
+[vars]
+# Public project URL only — never put service_role or DB password here.
+SUPABASE_URL = "https://nkkcecuopkdmtvsjdcav.supabase.co"
+
+# SUPABASE_ANON_KEY is a Worker secret (wrangler secret put), not a [vars] entry.

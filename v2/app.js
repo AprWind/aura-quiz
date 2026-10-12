@@ -20,7 +20,16 @@ function rndTok(n){return Array.from(crypto.getRandomValues(new Uint8Array(n)),f
 function rpc(name,body){
   var ctrl=typeof AbortController!=="undefined"?new AbortController():null;
   var to=ctrl?setTimeout(function(){ctrl.abort();},15000):null;
-  return fetch(CFG.SUPABASE_URL+"/rest/v1/rpc/"+name,{method:"POST",headers:{"Content-Type":"application/json",apikey:CFG.SUPABASE_ANON_KEY,Authorization:"Bearer "+CFG.SUPABASE_ANON_KEY},body:JSON.stringify(body),signal:ctrl?ctrl.signal:undefined})
+  var base=(CFG.API_BASE||"").replace(/\/+$/,"");
+  var useProxy=!!base;
+  var useDirect=!useProxy&&!!CFG.USE_DIRECT_SUPABASE;
+  if(!useProxy&&!useDirect){
+    return Promise.reject((function(){var e=new Error("api_not_configured");e.kind="config";return e;})());
+  }
+  var url=useProxy?(base+"/rpc/"+name):(CFG.SUPABASE_URL+"/rest/v1/rpc/"+name);
+  var headers={"Content-Type":"application/json"};
+  if(useDirect){headers.apikey=CFG.SUPABASE_ANON_KEY;headers.Authorization="Bearer "+CFG.SUPABASE_ANON_KEY;}
+  return fetch(url,{method:"POST",headers:headers,body:JSON.stringify(body),signal:ctrl?ctrl.signal:undefined})
    .then(function(r){
      return r.text().then(function(t){
        var data=null; try{data=t?JSON.parse(t):null;}catch(e){var pe=new Error("bad_json");pe.kind="bad_json";pe.status=r.status;throw pe;}
@@ -32,8 +41,9 @@ function rpc(name,body){
 }
 function netErrText(err){
   if(!err)return "网络异常，请重试（重试不会重复计次）";
-  if(err.name==="AbortError"||(err.kind==="http"&&err.status===0))return "连接超时，请检查网络后重试（国内访问 supabase.co 可能较慢或被拦截，可换网络/系统浏览器或开启加速后再试；重试不会重复计次）";
-  if(err.message==="Failed to fetch"||err.name==="TypeError")return "无法连接服务器（网络异常）。国内网络或微信内置浏览器常无法直连 supabase.co，请用系统浏览器打开，或开启 VPN/加速后再试（重试不会重复计次）";
+  if(err.kind==="config")return "服务暂未配置完成，请稍后再试";
+  if(err.name==="AbortError"||(err.kind==="http"&&err.status===0))return "连接超时，请检查网络后重试（可换网络/系统浏览器后再试；重试不会重复计次）";
+  if(err.message==="Failed to fetch"||err.name==="TypeError")return "无法连接服务器（网络异常）。请用系统浏览器打开或稍后再试（重试不会重复计次）";
   if(err.kind==="http")return "服务器响应异常（"+err.status+"），请稍后重试（重试不会重复计次）";
   if(err.kind==="bad_json")return "服务器返回异常，请稍后重试（重试不会重复计次）";
   return "网络异常，请重试（重试不会重复计次）";
