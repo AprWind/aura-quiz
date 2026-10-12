@@ -126,7 +126,7 @@ function renderResult(res,isShare){
     '<div class="quote">'+esc(t.quote)+'</div><div class="kws">'+t.kw.map(function(k){return"<span>"+esc(k)+"</span>";}).join("")+'</div>'+
     '<div class="scores">'+bars+'</div>';
   if(!isShare) h+='<div class="sec"><h3>气场解析</h3><p>'+esc(t.desc)+'</p></div><div class="sec"><h3>你的优势</h3><ul>'+t.pros.map(function(x){return"<li>"+esc(x)+"</li>";}).join("")+'</ul></div><div class="sec"><h3>魅力进阶</h3><ul>'+t.tips.map(function(x){return"<li>"+esc(x)+"</li>";}).join("")+'</ul></div>';
-  h+='<div class="cfoot">仅供娱乐参考'+(MOCK?' · 演示模式':'')+'</div></div>';
+  h+='<div class="cfoot">仅供娱乐参考，非心理诊断'+(MOCK?' · 演示模式':'')+'</div></div>';
   $("card").innerHTML=h; $("res-msg").textContent="";
   $("share").hidden=isShare; $("again").textContent=isShare?"我也要测":"再测一次";
   $("save").onclick=function(){exportPng(res,t,a,c);};
@@ -169,7 +169,7 @@ function exportPng(res,t,a,c){
   D.DIMS.forEach(function(d,i){var y=1160+i*80,v=res.scores[d.name]||0;x.fillStyle="#3a3228";x.font="30px "+F;x.fillText(d.name,80,y+10);
     x.fillStyle="rgba(140,110,70,.14)";rr(x,260,y-8,620,14,7);x.fill();var gg=x.createLinearGradient(260,0,880,0);gg.addColorStop(0,"#b8924e");gg.addColorStop(1,"#c4877a");
     x.fillStyle=gg;rr(x,260,y-8,620*v/100,14,7);x.fill();x.fillStyle="#b8924e";x.font="34px Georgia,serif";x.textAlign="right";x.fillText(v,1000,y+12);x.textAlign="left";});
-  x.fillStyle="#8a7d6e";x.font="24px "+F;x.textAlign="center";x.fillText("仅供娱乐参考"+(MOCK?" · 演示模式":""),W/2,1540);
+  x.fillStyle="#8a7d6e";x.font="24px "+F;x.textAlign="center";x.fillText("仅供娱乐参考，非心理诊断"+(MOCK?" · 演示模式":""),W/2,1540);
   var url=cv.toDataURL("image/png");
   $("modal-img").src=url;$("modal").hidden=false;
   var l=document.createElement("a");l.href=url;l.download="AURA-"+t.name+".png";document.body.appendChild(l);l.click();l.remove();
