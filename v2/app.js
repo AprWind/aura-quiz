@@ -5,8 +5,8 @@ var CFG=window.AURA_CONFIG||{}, D=window.AURA_DATA, S=window.AURA_SCORE;
 var MOCK = CFG.MODE !== "live";
 var KEY="aura_v2_state", MOCK_SHARES="aura_v2_mock_shares";
 var $=function(id){return document.getElementById(id);};
-var ART={cool:["#3b4a66","#0f141f","#9fb6d9"],lazy:["#6b4f3a","#1d1510","#e8c39a"],danger:["#6e1f33","#14070c","#e0708c"],
-         gentle:["#5a6b5a","#121812","#cfe3c4"],pure:["#7d6a8f","#17121d","#f1d6ec"],free:["#7a5a22","#16100a","#f0cf86"]};
+var ART={cool:["#a8b8c8","#e8eef4","#d4dde8"],lazy:["#d4b89a","#f5ebe0","#e8d0b4"],danger:["#d4a0a0","#f8e8e4","#e8c0b8"],
+         gentle:["#b8c8b0","#eef4ea","#d4e0cc"],pure:["#c8b0c8","#f4eaf4","#e4d0e4"],free:["#d8c090","#f7f0e0","#ead8a8"]};
 var st=load();
 if(!MOCK&&st&&st.session_token&&/^mock-/.test(st.session_token))st=null;
 var gender=null, busy=false;
@@ -118,21 +118,22 @@ $("again").onclick=function(){st=null;save();history.replaceState(null,"",locati
 function exportPng(res,t,a,c){
   var W=1080,H=1600,cv=document.createElement("canvas");cv.width=W;cv.height=H;var x=cv.getContext("2d");
   var F='"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif';
-  x.fillStyle="#0e0c12";x.fillRect(0,0,W,H);
-  var g=x.createRadialGradient(W/2,300,40,W/2,300,700);g.addColorStop(0,c[0]);g.addColorStop(1,"#0e0c12");x.fillStyle=g;x.fillRect(0,0,W,760);
-  var f=x.createLinearGradient(0,120,0,640);f.addColorStop(0,c[2]);f.addColorStop(1,"rgba(0,0,0,0)");x.fillStyle=f;
+  x.fillStyle="#f6f0e6";x.fillRect(0,0,W,H);
+  var g=x.createRadialGradient(W/2,280,40,W/2,280,720);g.addColorStop(0,c[0]);g.addColorStop(1,"#f6f0e6");x.fillStyle=g;x.fillRect(0,0,W,760);
+  var soft=x.createLinearGradient(0,0,0,760);soft.addColorStop(0,c[1]);soft.addColorStop(1,"#fffaf3");x.fillStyle=soft;x.globalAlpha=.55;x.fillRect(0,0,W,760);x.globalAlpha=1;
+  var f=x.createLinearGradient(0,120,0,640);f.addColorStop(0,c[2]);f.addColorStop(1,"rgba(246,240,230,0)");x.fillStyle=f;
   x.beginPath();x.moveTo(W/2-160,640);x.lineTo(W/2-160,280);x.arc(W/2,280,160,Math.PI,0);x.lineTo(W/2+160,640);x.fill();
-  x.textAlign="left";x.fillStyle="#d8b878";x.font="30px Georgia,serif";x.fillText("A U R A",80,100);
-  x.fillStyle="#9a93a8";x.font="26px "+F;x.fillText("个人气场诊断报告",250,100);
-  x.fillStyle="rgba(255,255,255,.8)";x.font="28px "+F;x.fillText(a.name+" · "+(res.gender==="male"?"他":"她"),80,720);
-  x.fillStyle="#f3dfae";x.font="84px "+F;x.fillText(t.name,80,830);
-  x.fillStyle="#9a93a8";x.font="28px Georgia,serif";x.fillText(t.en,84,880);
-  x.fillStyle="#d8b878";x.fillRect(80,930,4,50);x.fillStyle="#e4dcef";x.font="36px "+F;x.fillText(t.quote,104,968);
-  var kx=80;x.font="28px "+F;t.kw.forEach(function(k){var w=x.measureText(k).width+48;x.fillStyle="rgba(216,184,120,.15)";rr(x,kx,1020,w,56,28);x.fill();x.fillStyle="#f3dfae";x.fillText(k,kx+24,1058);kx+=w+16;});
-  D.DIMS.forEach(function(d,i){var y=1160+i*80,v=res.scores[d.name]||0;x.fillStyle="#cfc8da";x.font="30px "+F;x.fillText(d.name,80,y+10);
-    x.fillStyle="rgba(255,255,255,.1)";rr(x,260,y-8,620,14,7);x.fill();var gg=x.createLinearGradient(260,0,880,0);gg.addColorStop(0,"#d8b878");gg.addColorStop(1,"#c9708a");
-    x.fillStyle=gg;rr(x,260,y-8,620*v/100,14,7);x.fill();x.fillStyle="#f3dfae";x.font="34px Georgia,serif";x.textAlign="right";x.fillText(v,1000,y+12);x.textAlign="left";});
-  x.fillStyle="#6f687c";x.font="24px "+F;x.textAlign="center";x.fillText("仅供娱乐参考"+(MOCK?" · 演示模式":""),W/2,1540);
+  x.textAlign="left";x.fillStyle="#b8924e";x.font="30px Georgia,serif";x.fillText("A U R A",80,100);
+  x.fillStyle="#8a7d6e";x.font="26px "+F;x.fillText("个人气场诊断报告",250,100);
+  x.fillStyle="rgba(47,41,34,.72)";x.font="28px "+F;x.fillText(a.name+" · "+(res.gender==="male"?"他":"她"),80,720);
+  x.fillStyle="#7a5c28";x.font="84px "+F;x.fillText(t.name,80,830);
+  x.fillStyle="#8a7d6e";x.font="28px Georgia,serif";x.fillText(t.en,84,880);
+  x.fillStyle="#c9a86a";x.fillRect(80,930,4,50);x.fillStyle="#3a3228";x.font="36px "+F;x.fillText(t.quote,104,968);
+  var kx=80;x.font="28px "+F;t.kw.forEach(function(k){var w=x.measureText(k).width+48;x.fillStyle="rgba(201,168,106,.18)";rr(x,kx,1020,w,56,28);x.fill();x.fillStyle="#8a6a35";x.fillText(k,kx+24,1058);kx+=w+16;});
+  D.DIMS.forEach(function(d,i){var y=1160+i*80,v=res.scores[d.name]||0;x.fillStyle="#3a3228";x.font="30px "+F;x.fillText(d.name,80,y+10);
+    x.fillStyle="rgba(140,110,70,.14)";rr(x,260,y-8,620,14,7);x.fill();var gg=x.createLinearGradient(260,0,880,0);gg.addColorStop(0,"#b8924e");gg.addColorStop(1,"#c4877a");
+    x.fillStyle=gg;rr(x,260,y-8,620*v/100,14,7);x.fill();x.fillStyle="#b8924e";x.font="34px Georgia,serif";x.textAlign="right";x.fillText(v,1000,y+12);x.textAlign="left";});
+  x.fillStyle="#8a7d6e";x.font="24px "+F;x.textAlign="center";x.fillText("仅供娱乐参考"+(MOCK?" · 演示模式":""),W/2,1540);
   var url=cv.toDataURL("image/png");
   $("modal-img").src=url;$("modal").hidden=false;
   var l=document.createElement("a");l.href=url;l.download="AURA-"+t.name+".png";document.body.appendChild(l);l.click();l.remove();
